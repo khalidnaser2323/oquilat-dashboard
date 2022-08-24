@@ -1,0 +1,94 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<div class="container app" *ngIf="conversations && conversations.length">
+  <div class="row app-one">
+    <div class="col-sm-12 side">
+      <div class="col-sm-12 conversation">
+        <div class="row heading">
+          <div class="col-sm-2 col-md-1 col-xs-3 heading-avatar">
+            <div class="heading-avatar-icon">
+              <img src="https://bootdey.com/img/Content/avatar/avatar6.png" />
+            </div>
+          </div>
+          <div class="col-sm-2 col-xs-3  col-md-1 heading-name" *ngIf="user">
+            <a class="heading-name-meta pull-right">{{user.name}}
+            </a>
+          </div>
+        </div>
+        <div class="row message" id="conversation">
+          <!-- <div class="row message-previous">
+            <div class="col-sm-12 previous">
+              <a onclick="previous(this)" id="ankitjain28" name="20">
+                Show Previous Message!
+              </a>
+            </div>
+          </div> -->
+          <div #box style="overflow: scroll; height: xyz;">
+            <div *ngFor="let c of conversations">
+              <div class="row" *ngIf="c.type === 'customer'">
+                <div class="col-sm-12 message-main-receiver">
+                  <div class="receiver pull-left">
+                    <div class="message-text" style="white-space:pre-wrap">
+                      {{c.message}}
+                    </div>
+                    <span class="message-time pull-right">
+                      {{c.isToday ? (c.created_at | date: 'shortTime') : (c.created_at | date: 'fullDate')}}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row" *ngIf="c.type === 'bot'">
+                <div class="col-sm-12 message-main-sender">
+                  <div class="sender">
+                    <div class="message-text" style="white-space:pre-wrap">
+                      {{c.message}}
+                    </div>
+                    <span class="message-time pull-right">
+                      {{c.isToday ? (c.created_at | date: 'shortTime') : (c.created_at | date: 'fullDate')}}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <form>
+          <div class="form-row">
+            <div class="form-group col-md-2">
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="manual" id="manual" [(ngModel)]="chat_status" [value]="'manual'" (click)="changeStatus('manual')" name="type"
+                  id="inlineRadio1" value="litebean">
+                <label class="form-check-label" for="inlineRadio1">الرد يدوي</label>
+              </div>
+            </div>
+            <div class="form-group col-md-2">
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="bot" id="bot" [(ngModel)]="chat_status" [value]="'bot'" (click)="changeStatus('bot')" name="type" id="inlineRadio2"
+                  value="powerbean">
+                <label class="form-check-label" for="inlineRadio2">الرد عن طريق البوت </label>
+              </div>
+            </div>
+          </div>
+        </form>
+        <div class="row reply">
+          <!-- <div class="col-sm-1 col-xs-1 reply-emojis">
+            <i class="fa fa-smile-o fa-2x"></i>
+          </div> -->
+          <div class="col-sm-9 col-xs-9 reply-main">
+            <textarea [disabled]="chat_status === 'bot'" [(ngModel)]="messageText" [ngModelOptions]="{standalone: true}"
+              class="form-control" rows="1" (keypress)="sendNewMessageWhenClickEnter($event)" id="comment"></textarea>
+          </div>
+          <!-- <div class="col-sm-1 col-xs-1 reply-recording">
+            <i class="fa fa-microphone fa-2x" aria-hidden="true"></i>
+          </div> -->
+          <div class="col-sm-1 col-xs-1 reply-send" (click)="sendNewMessage()" *ngIf="messageText">
+            <i class="fa fa-send fa-2x" aria-hidden="true"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div *ngIf="conversations && !conversations.length">
+  <h3>لا يوجد محادثات</h3>
+</div>

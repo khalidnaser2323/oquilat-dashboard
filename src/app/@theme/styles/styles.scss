@@ -1,0 +1,56 @@
+@import url("https://fonts.googleapis.com/css?family=Open+Sans:400,600,700&display=swap");
+
+// themes - our custom or/and out of the box themes
+@import "themes";
+
+// framework component themes (styles tied to theme variables)
+@import "~@nebular/theme/styles/globals";
+@import "~@nebular/auth/styles/all";
+
+@import "~bootstrap/scss/functions";
+@import "~bootstrap/scss/variables";
+@import "~bootstrap/scss/mixins";
+@import "~bootstrap/scss/grid";
+@import "~bootstrap-icons/font/bootstrap-icons.css";
+
+// loading progress bar theme
+@import "./pace.theme";
+
+@import "./layout";
+@import "./overrides";
+
+// install the framework and custom global styles
+@include nb-install() {
+  // framework global styles
+  @include nb-theme-global();
+  @include nb-auth-global();
+
+  @include ngx-layout();
+  // loading progress bar
+  @include ngx-pace-theme();
+
+  @include nb-overrides();
+}
+
+.nb-theme-dark table,
+.nb-theme-cosmic table {
+  color: #fff !important;
+}
+
+table th {
+  font-size: 0.8125rem !important;
+}
+.menu-title {
+  padding-right: 5px;
+  color: #2aac6f;
+}
+.nb-theme-default h3,
+.nb-theme-default .h3 {
+  color: #2aac6f;
+}
+.user-name {
+  color: #2aac6f !important;
+}
+nb-icon {
+  color: #2aac6f !important;
+}

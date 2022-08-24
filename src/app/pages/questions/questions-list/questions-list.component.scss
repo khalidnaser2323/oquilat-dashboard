@@ -1,0 +1,9 @@
+ngx-image-viewer {
+  width: 400px;
+  height: 200px;
+  margin-top: 10px;
+}
+::ng-deep .img-container {
+  width: 100px !important;
+  height: 100px !important;
+}

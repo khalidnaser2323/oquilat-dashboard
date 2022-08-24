@@ -1,0 +1,82 @@
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <button type="button" class="btn btn-secondary mr-1" routerLink="/pages/team/add">عضو جديد</button>
+      <button type="button" class="btn btn-info mr-1">
+        العدد <span class="badge badge-light">{{totalItemsPagination}}</span>
+      </button>
+    </div>
+    <div class="col serach">
+      <i class="control-icon ion ion-ios-search" (click)="showInput()"></i>
+      <input class="search-input" placeholder="....ابحث بالاسم/ رقم الجوال/ رقم الهوية/البريد الالكتروني" #input
+        [class.hidden]="!isInputShown" (blur)="hideInput()">
+    </div>
+  </div>
+  <div class="row pt-4">
+    <div class="col">
+      <nav class="nav">
+        <a class="nav-link" ngClass="{{!activeTeam ? 'active' : ''}}" (click)="loadUsers()">كل المستخدمين</a>
+        <a class="nav-link" ngClass="{{activeTeam ? 'active' : ''}}" aria-current="page"
+          (click)="loadUsers({ role: 'engineer,admin' })">اعضاء الفريق</a>
+      </nav>
+    </div>
+  </div>
+  <div class="row" *ngIf=" !usersList">
+    <div class="col">
+      <p>لا يوجد الفريق</p>
+    </div>
+  </div>
+  <div class="row pt-4" *ngIf="!spinnerLoading">
+    <div class="col" *ngIf="noUsers">
+      <p>لا يوجد مستخدمين</p>
+    </div>
+    <div class="col" *ngIf="!noUsers">
+      <table id="excel-table" *ngIf="usersList" class="table table-striped table-bordered">
+        <thead>
+          <tr>
+            <th scope="col">الاسم</th>
+            <th scope="col">رقم الجوال</th>
+            <th scope="col">عمليات</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor=" let user of usersList">
+            <th scope="row">{{user?.name}}</th>
+            <th scope="row" dir="ltr">{{user.mobile}}</th>
+            <th scope="row">
+              <button type="button" class="btn btn-outline-secondary mr-1 btn-sm"
+                routerLink="/pages/team/edit/{{user._id}}">تعديل</button>
+              <!-- <button type="button" class="btn btn-outline-danger mr-1 btn-sm"
+                (click)="deleteOneuser(user._id)">حذف</button> -->
+            </th>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="row" *ngIf="!spinnerLoading">
+    <div class="col">
+      <ngb-pagination [collectionSize]="totalItemsPagination" [pageSize]="itemsPerPage" [(page)]="page" [maxSize]="7"
+        [rotate]="true" (pageChange)="loadPage($event)"></ngb-pagination>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<ng-template #mymodal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">هل تريد تأكيد الحذف ؟</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">×</span>
+    </button>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="deleteusersList()">تأكيد الحذف</button>
+  </div>
+</ng-template>
+
+<div class="text-center" *ngIf="spinnerLoading" style="width: 3rem; height: 3rem;">
+  <div class="spinner-border" role="status">
+    <span class="sr-only">Loading...</span>
+  </div>
+</div>

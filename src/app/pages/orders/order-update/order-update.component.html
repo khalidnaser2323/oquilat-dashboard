@@ -1,0 +1,119 @@
+<div class="card">
+  <div class="card-body">
+    <div class="container" *ngIf="updateUserForm">
+      <div class="row">
+        <div class="col">
+          <h3>معلومات العميل</h3>
+        </div>
+      </div>
+      <form [formGroup]="updateUserForm">
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label>رقم الهوية</label>
+            <input type="text" class="form-control" required formControlName="identification_number"
+              placeholder="رقم الهوية">
+          </div>
+          <div class="form-group col-md-6">
+            <label>اسم العميل</label>
+            <input type="text" class="form-control" required formControlName="name" placeholder="اسم العميل">
+          </div>
+          <div class="form-group col-md-6" dir="ltr">
+            <label>رقم الموبايل</label>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1">966</span>
+              </div>
+              <input type="tel" class="form-control" placeholder="رقم الموبايل" formControlName="mobile"
+                aria-label="mobile" aria-describedby="basic-addon1">
+            </div>
+          </div>
+          <div class="form-group col-md-6">
+            <label>الحي</label>
+            <input type="text" class="form-control" required formControlName="region" placeholder="اختر الحي">
+          </div>
+          <div class="form-group col-md-6">
+            <label>العنوان</label>
+            <input type="text" class="form-control" required formControlName="address" placeholder="العنوان">
+          </div>
+          <div class="form-group col-md-6">
+            <label>البريد الالكتروني</label>
+            <input type="email" class="form-control" formControlName="email" placeholder="ادخل البريد الالكتروني">
+          </div>
+          <div class="form-group col-md-6">
+            <label>ملاحظات</label>
+            <textarea class="form-control" formControlName="notes"
+              placeholder="ادخل ملاحظاتك حول هذا العميل"></textarea>
+          </div>
+          <div class="form-group col-md-6">
+            <label>صورة الهوية</label>
+            <input type="file" class="form-control" (change)="onPickedImage($event)">
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="card mt-3">
+  <div class="card-body">
+    <div class="container" *ngIf="updateOrderForm">
+      <div class="row">
+        <div class="col">
+          <h3>معلومات الطلب</h3>
+        </div>
+      </div>
+      <form [formGroup]="updateOrderForm" (ngSubmit)="onSubmit()">
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" formControlName="type" name="type" id="inlineRadio1"
+                value="litebean">
+              <label class="form-check-label" for="inlineRadio1">litebean</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" formControlName="type" name="type" id="inlineRadio2"
+                value="powerbean">
+              <label class="form-check-label" for="inlineRadio2">powerbean</label>
+            </div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="inputAddress">User</label>
+            <input type="text" class="form-control" formControlName="userType" placeholder="User">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="inputAddress">الـ IP الفرعي</label>
+            <input type="text" class="form-control" formControlName="secondary_ip" placeholder="الـ IP الفرعي">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="inputAddress">الـ IP الرئيسي</label>
+            <input type="text" class="form-control" formControlName="primary_ip" placeholder="الـ IP الرئيسي">
+          </div>
+        </div>
+        <div class="form-row" *ngIf="bundlesList">
+          <div class="form-group col-md-6">
+            <label for="inputAddress">اختر باقة الانترنت</label>
+            <select class="custom-select" id="inputGroupSelect01" formControlName="bundle">
+              <option selected>اختر باقة بالسرعة المطلوبة</option>
+              <option *ngFor="let bundle of bundlesList" value="{{bundle._id}}">{{bundle.label}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <button *ngIf="!loading" type="submit" class="btn btn-primary">تعديل الطلب</button>
+            <button *ngIf="loading" class="btn btn-primary" type="button" disabled>
+              <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+              <span class="sr-only"></span>جاري الحفظ...
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

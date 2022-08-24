@@ -1,0 +1,42 @@
+
+<div class="card mt-3">
+  <div class="card-body">
+    <div class="container" *ngIf="updateBundleForm">
+      <div class="row">
+        <div class="col">
+          <h3>معلومات الباقة</h3>
+        </div>
+      </div>
+      <form [formGroup]="updateBundleForm" (ngSubmit)="onSubmit()">
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="inputAddress">اسم الباقة</label>
+            <input type="text" class="form-control" formControlName="name" placeholder="ادخل اسم الباقة">
+          </div>
+          <div class="form-group col-md-6">
+            <label for="inputAddress">سعر الباقة</label>
+            <input type="number" class="form-control" formControlName="price" placeholder="ادخل سعر الباقة">
+          </div>
+          <div class="form-group col-md-6">
+            <label for="inputAddress">سرعة الباقة</label>
+            <input type="number" class="form-control" formControlName="speed" placeholder="ادخل سعر الباقة">
+          </div>
+          <div class="form-group col-md-6">
+            <label for="inputAddress">كمية الباقة (Quota)</label>
+            <input type="number" class="form-control" formControlName="quota" placeholder="ادخل سعر الباقة">
+          </div>
+        </div>
+       
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <button *ngIf="!loading" type="submit" class="btn btn-primary">تعديل الباقة</button>
+            <button *ngIf="loading" class="btn btn-primary" type="button" disabled>
+              <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+              <span class="sr-only"></span>جاري التعديل...
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

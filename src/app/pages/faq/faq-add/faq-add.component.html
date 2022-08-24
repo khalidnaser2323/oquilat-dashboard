@@ -1,0 +1,34 @@
+<div class="card">
+  <div class="card-body">
+    <div class="container" *ngIf="createFaqForm">
+      <div class="row">
+        <div class="col">
+          <h3>معلومات السؤال</h3>
+        </div>
+      </div>
+      <form [formGroup]="createFaqForm" (ngSubmit)="onSubmit()">
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label>السؤال</label>
+            <input type="text" class="form-control" required formControlName="question" placeholder="السؤال">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label> الإجابة</label>
+            <textarea class="form-control" formControlName="answer" placeholder="الإجابة"></textarea>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <button *ngIf="!loading" type="submit" class="btn btn-primary">حفظ السؤال</button>
+            <button *ngIf="loading" class="btn btn-primary" type="button" disabled>
+              <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+              <span class="sr-only"></span>جاري الحفظ...
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

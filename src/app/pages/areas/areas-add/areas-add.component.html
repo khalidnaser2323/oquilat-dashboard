@@ -1,0 +1,31 @@
+<div class="card mt-3">
+  <div class="card-body">
+    <div class="container">
+      <div class="row pt-3">
+        <div class="col">
+          <h3>معلومات المنطقة وحدودها</h3>
+        </div>
+      </div>
+      <div class="row pt-3">
+        <div class="col-md-4">
+          <label for="inputAddress">اسم المنطقة</label>
+          <input type="text" class="form-control" [(ngModel)]="areaName" placeholder="ادخل اسم المنطقة">
+        </div>
+      </div>
+      <div class="row pt-3">
+        <div class="col">
+          <div id="map"></div>
+        </div>
+      </div>
+      <div class="row pt-3">
+        <div class="col">
+          <button *ngIf="!loading" type="submit" (click)="addPolygon()" class="btn btn-primary">حفظ المنطقة</button>
+          <button *ngIf="loading" class="btn btn-primary" type="button" disabled>
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            <span class="sr-only"></span>جاري الحفظ...
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

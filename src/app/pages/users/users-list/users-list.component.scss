@@ -1,0 +1,51 @@
+ngx-image-viewer {
+  width: 400px;
+  height: 200px;
+  margin-top: 10px;
+}
+::ng-deep .img-container {
+  width: 100px !important;
+  height: 60px;
+}
+.nav-link {
+  color: blue !important;
+  cursor: pointer;
+}
+
+.active {
+  background-color: gray;
+  color: white !important;
+}
+
+.serach {
+  display: flex;
+  align-items: center;
+  float: left;
+  direction: ltr;
+  i.control-icon {
+    &::before {
+      font-size: 2.3rem;
+    }
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}
+
+.search-input {
+  border: none;
+  outline: none;
+  margin-left: 1rem;
+  text-align: right;
+  height: 40px;
+  width: 20rem;
+  padding-right: 5px;
+  transition: width 0.2s ease;
+
+  &.hidden {
+    width: 0;
+    height: 0;
+    margin: 0;
+  }
+}

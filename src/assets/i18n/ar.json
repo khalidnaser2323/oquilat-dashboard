@@ -1,0 +1,10 @@
+{
+  "orders": {
+    "payment_status": {
+      "notdetermined": "لم يتم التحديد",
+      "paid": "تم الدفع",
+      "unpaid": "لم يتم الدفع",
+      "forgiven": "معفي"
+    }
+  }
+}

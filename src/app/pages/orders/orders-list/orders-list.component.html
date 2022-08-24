@@ -1,0 +1,121 @@
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <h3>قائمة الطلبات</h3>
+    </div>
+  </div>
+  <div class="row" *ngIf=" !subscriptions || !subscriptions.length">
+    <div class="col">
+      <p>لا يوجد طلبات</p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col serach">
+      <i class="control-icon ion ion-ios-search" (click)="showInput()"></i>
+      <input class="search-input" placeholder="....ابحث باسم طلب الشراء/ رقم الجوال/ اسم العميل " #input
+        [class.hidden]="!isInputShown" (blur)="hideInput()">
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <!-- <button type="button" class="btn btn-secondary mr-1" routerLink="/pages/orders/add">طلب جديد</button> -->
+      <button class="btn btn-secondary mr-1" (click)="open(mymodal)">حذف المحدد</button>
+      <button type="button" class="btn btn-secondary mr-1" (click)="exportexcel()">تصدير</button>
+      <button type="button" class="btn btn-info mr-1">
+        عدد الطلبات <span class="badge badge-light">{{totalItems}}</span>
+      </button>
+    </div>
+  </div>
+  <div class="row pt-4" *ngIf="!spinnerLoading">
+    <div class="col">
+      <table id="excel-table" *ngIf="subscriptions && subscriptions.length" class="table table-striped table-bordered">
+        <thead>
+          <tr>
+            <th scope="col">
+              <input type="checkbox" [(ngModel)]="selectedAll" (change)="selectAll();">
+            </th>
+            <th scope="col">اسم المنتج</th>
+            <th scope="col">اسم العميل</th>
+            <th scope="col">رقم الجوال</th>
+            <th scope="col">حالة المنتج</th>
+            <th scope="col">تاريخ الطلب </th>
+            <th>صورة المنتج</th>
+            <th scope="col">العمليات</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor=" let subscription of subscriptions">
+            <th scope="row"><input type="checkbox" [(ngModel)]="subscription.selected" (change)="checkIfAllSelected();">
+            </th>
+            <th scope="row">{{subscription?.name}}</th>
+            <th scope="row">{{subscription?.user?.name}}</th>
+            <th scope="row">{{subscription?.user?.mobile}}</th>
+            <th scope="row">
+              <span *ngIf="subscription.isArchived" class="badge badge-danger">محذوف</span>
+              <span *ngIf="!subscription.isArchived" class="badge badge-success">غير محذوف</span>
+            </th>
+            <th scope="row">{{subscription.created_at | date: 'short'}}</th>
+            <th>
+              <ngx-image-viewer *ngIf="subscription?.images?.length" [src]="subscription.images">
+              </ngx-image-viewer>
+              <span *ngIf="!subscription?.images?.length">لا يوجد</span>
+            </th>
+            <th>
+              <button type="button" class="btn btn-outline-danger mr-1 btn-sm"
+                (click)="deleteOneSub(subscription._id)">حذف</button>
+            </th>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="row" *ngIf="!spinnerLoading">
+    <div class="col">
+      <ngb-pagination [collectionSize]="totalItemsPagination" [pageSize]="itemsPerPage" [(page)]="page" [maxSize]="7"
+        [rotate]="true" (pageChange)="loadPage($event)"></ngb-pagination>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<ng-template #mymodal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">هل تريد تأكيد الحذف ؟</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">×</span>
+    </button>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="deleteSubscriptions()">تأكيد الحذف</button>
+  </div>
+</ng-template>
+<button hidden id="openModalButton" class="btn btn-secondary mr-1" (click)="open(createPayemntModal)">حذف
+  المحدد</button>
+
+<!-- <ng-template #createPayemntModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">معلومات الدفع نيابة عن العميل</h4>
+  </div>
+  <div class="modal-body">
+    <div class="container">
+      <div class="row">
+        <div class="form-group col-md-12">
+          <label for="inputAddress">اختر العميل صاحب الفاتورة </label>
+          <select class="custom-select">
+            <option *ngFor="let user of usersList" value="{{user._id}}">
+              {{user.name}}</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="deleteSubscriptions()">تأكيد الدفع</button>
+  </div>
+</ng-template> -->
+
+<div *ngIf="spinnerLoading" class="text-center" style="width: 3rem; height: 3rem;">
+  <div class="spinner-border" role="status">
+    <span class="sr-only">Loading...</span>
+  </div>
+</div>

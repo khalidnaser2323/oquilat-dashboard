@@ -1,0 +1,66 @@
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <h3>قائمة الباقات</h3>
+    </div>
+  </div>
+  <div class="row" *ngIf=" !bundlesList">
+    <div class="col">
+      <p>لا يوجد باقات</p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <button type="button" class="btn btn-secondary mr-1" routerLink="/pages/bundles/add">باقة جديد</button>
+    </div>
+  </div>
+  <div class="row pt-4">
+    <div class="col">
+      <table id="excel-table" *ngIf="bundlesList" class="table table-striped table-bordered">
+        <thead>
+          <tr>
+            <th scope="col">اسم الباقة</th>
+            <th scope="col" *ngIf="agentRole==='admin'">السعر</th>
+            <th scope="col">السرعة</th>
+            <th scope="col">الكمية (quota)</th>
+            <th scope="col">عمليات</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor=" let bundle of bundlesList">
+            <th scope="row">{{bundle?.name}}</th>
+            <th scope="row" *ngIf="agentRole==='admin'">{{bundle.price}}</th>
+            <th scope="row">{{bundle.speed}}</th>
+            <th scope="row">{{bundle.quota}}</th>
+            <th scope="row">
+          
+              <button type="button" class="btn btn-outline-secondary mr-1 btn-sm"
+                routerLink="/pages/bundles/edit/{{bundle._id}}">تعديل</button>
+              <button type="button" class="btn btn-outline-danger mr-1 btn-sm"
+                (click)="deleteOneBundle(bundle._id)">حذف</button>
+            </th>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <ngb-pagination [collectionSize]="totalItems" [pageSize]="itemsPerPage" [(page)]="page" [maxSize]="7"
+        [rotate]="true" (pageChange)="loadPage($event)"></ngb-pagination>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<ng-template #mymodal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">هل تريد تأكيد الحذف ؟</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">×</span>
+    </button>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="deletebundlesList()">تأكيد الحذف</button>
+  </div>
+</ng-template>

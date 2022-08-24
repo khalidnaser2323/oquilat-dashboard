@@ -1,0 +1,125 @@
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <h3>قائمة أسئلة العميل</h3>
+    </div>
+  </div>
+  <div class="row" *ngIf=" !complaintsList">
+    <div class="col">
+      <p>لا يوجد طلبات</p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <nav>
+        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+          <a class="nav-item nav-link" [ngClass]="(queries | json) === '{}' ? 'active' : ''" id="nav-all-tab"
+            data-toggle="tab" routerLink="/pages/questions/list" role="tab" aria-controls="nav-all"
+            aria-selected="true">الكل</a>
+          <a class="nav-item nav-link" [ngClass]="queries && queries.questionFor === 'presale'  ? 'active' : ''"
+            id="nav-pre-sale-tab" data-toggle="tab" routerLink="/pages/questions/list/"
+            [queryParams]="{questionFor: 'presale'}" role="tab" aria-controls="nav-pre-sale" aria-selected="false">اسئلة
+            عن منتج قبل البيع</a>
+          <a class="nav-item nav-link" [ngClass]="queries && queries.questionFor === 'aftersale'  ? 'active' : ''"
+            id="nav-after-sale-tab" data-toggle="tab" routerLink="/pages/questions/list/"
+            [queryParams]="{questionFor: 'aftersale'}" role="tab" aria-controls="nav-after-sale"
+            aria-selected="false">اسئلة عن منتج بعد البيع</a>
+        </div>
+      </nav>
+    </div>
+  </div>
+  <div class="row pt-4">
+    <div class="col">
+      <table id="excel-table" *ngIf="complaintsList" class="table table-striped table-bordered">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">السؤال</th>
+            <th scope="col">صور السؤال</th>
+            <th scope="col">رقم العميل</th>
+            <th scope="col">الحالة</th>
+            <th scope="col">انشئ فى</th>
+            <th scope="col">بواسطة</th>
+            <th scope="col">كيف تم حل السؤال</th>
+            <th scope="col">الحلول</th>
+            <th scope="col">تعديل الحالة</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor=" let compalint of complaintsList let i=index">
+            <th scope="row">{{ i + 1 }}</th>
+            <th scope="row">{{compalint?.text}}</th>
+            <th>
+              <span *ngIf="compalint.images.length">
+                <ngx-image-viewer [src]="compalint.images"></ngx-image-viewer>
+              </span>
+              <span *ngIf="!compalint.images.length">
+                لا يوجد صورة
+              </span>
+            </th>
+            <td dir="ltr">{{ compalint.mobile }}</td>
+            <td>
+              <span class="badge badge-success">{{compalint?.status[0]?.text}}</span>
+            </td>
+            <th scope="row">{{compalint.created_at | date: 'short'}}</th>
+            <th scope="row">{{compalint?.agentId?.name || 'لا يوجد تعديل من الفريق'}}</th>
+            <th scope="row">
+              <button class="btn btn-secondary mr-1" (click)="open(myActionModal, compalint)">أضف الحل</button>
+            </th>
+            <th scope="row">
+              <button *ngIf="compalint?.actionText?.length" class="btn btn-secondary mr-1" routerLink="/pages/complaints/answers/{{compalint._id}}">عرض
+                الحلول</button>
+                <p *ngIf="!compalint?.actionText?.length">لا يوجد حلول</p>
+            </th>
+            <th scope="row">
+              <select class="custom-select" (change)="onChange($event.target.value, compalint)">
+                <option disabled>اختر حالة السؤال</option>
+                <option *ngFor="let status of complaintStatusList"
+                  [selected]="compalint.status && compalint.status.length ? compalint.status[0].text === status.value  : ''"
+                  value="{{status.value}}">{{status.label}}</option>
+              </select>
+            </th>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <ngb-pagination [collectionSize]="totalItems" [pageSize]="itemsPerPage" [(page)]="page" [maxSize]="7"
+        [rotate]="true" (pageChange)="loadPage($event)"></ngb-pagination>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<ng-template #mymodal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">هل تريد تأكيد الحذف ؟</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">×</span>
+    </button>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="deletecomplaintsList()">تأكيد الحذف</button>
+  </div>
+</ng-template>
+
+
+<ng-template #myActionModal let-modal>
+  <div class="modal-body">
+    <form>
+      <div class="form-row">
+        <div class="form-group col-md-12">
+          <textarea class="form-control" [(ngModel)]="action" [ngModelOptions]="{standalone: true}"
+            placeholder="ادخل ملاحظاتك كيف تم حل السؤال"></textarea>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-md-12">
+          <button type="button" class="btn btn-outline-dark" (click)="sendAction()">حفظ</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</ng-template>
